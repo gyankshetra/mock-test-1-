@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gyankshetra - Mock Test 1 - 10Q Final</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui}
+body{background:#0e0e0e}
+.top{background:#0fa15f;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;color:#fff;border-radius:0 0 20px 20px}
+.logo{font-weight:800;font-size:22px;display:flex;gap:8px}
+.menuBtn{width:44px;height:44px;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#0fa15f;font-size:22px;font-weight:900}
+.mockBar{background:#dcfce7;margin:12px;border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.mockBar b{color:#14532d;font-size:14px}
+.timer{background:#14532d;color:#fff;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700}
+.qWrap{padding:10px 12px 100px;overflow:hidden}
+.slider{display:flex;transition:transform 0.35s ease;width:100%}
+.slide{min-width:100%;padding-right:4px}
+.qCard{background:#fff;border-radius:18px;padding:16px}
+.qNum{color:#14532d;font-weight:800;font-size:14px;margin-bottom:10px}
+.qText{font-size:15px;font-weight:600;line-height:1.4;margin-bottom:14px}
+.opt{border:2px solid #e5e7eb;border-radius:12px;padding:12px;margin:8px 0;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#fff}
+.opt.sel{border-color:#0fa15f;background:#f0fdf4}
+.opt.wrong{border-color:#ef4444;background:#fef2f2}
+.opt.correct{border-color:#16a34a;background:#dcfce7}
+.opTitle{font-weight:700;font-size:14px}
+.sub{font-size:11px;font-weight:600;margin-top:2px}
+.sub.wrong{color:#dc2626}
+.sub.correct{color:#15803d}
+.icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px}
+.wrong.icon{background:#ef4444;color:#fff}
+.correct.icon{background:#16a34a;color:#fff}
+.footer{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:12px;display:flex;gap:12px;border-radius:20px 20px 0 0}
+.btn{flex:1;padding:14px;border-radius:14px;font-weight:800;border:none;cursor:pointer}
+.prev{background:#fff;border:2px solid #ddd;color:#555}
+.next{background:#0fa15f;color:#fff}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:20;display:none}
+.overlay.show{display:block}
+.drawer{position:fixed;top:0;right:-100%;width:72%;max-width:320px;height:100%;background:#fff;z-index:30;transition:right 0.35s ease;border-radius:18px 0 0 18px;padding:16px;overflow:auto}
+.drawer.open{right:0}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.grid div{height:38px;border-radius:8px;background:#fff;border:1.5px solid #bbb;display:flex;align-items:center;justify-content:center;font-weight:700;cursor:pointer}
+.grid div.done{background:#14532d;color:#fff;border-color:#14532d}
+.grid div.active{background:#bbf7d0;color:#14532d;border-color:#0fa15f;outline:2px solid #0fa15f}
+</style>
+</head>
+<body>
+
+<div class="top">
+<div class="logo">🎓 Gyankshetra</div>
+<div class="menuBtn" onclick="openD()">☰</div>
+</div>
+
+<div class="mockBar">
+<b>Mock Test 1 • BPSC TRE 4.0</b>
+<div class="timer">⏱ 15:42</div>
+</div>
+
+<div class="qWrap" id="wrap"><div class="slider" id="slider"></div></div>
+
+<div class="footer">
+<button class="btn prev" onclick="go(-1)">← Prev</button>
+<button class="btn next" onclick="go(1)">Next →</button>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeD()"></div>
+<div class="drawer" id="drawer">
+<div style="display:flex;justify-content:space-between"><h3>Questions</h3><button onclick="closeD()" style="border:none;background:#eee;width:28px;height:28px;border-radius:50%">✕</button></div>
+<div id="ansCount" style="font-size:13px;color:#14532d;font-weight:600;margin-top:10px"></div>
+<div class="grid" id="grid"></div>
+</div>
+
+<script>
+const Qs=[
+{q:"Which of the following is the smallest structural and functional unit of life?",o:["Tissue","Cell","Organ","Organ System","Not Attempted"],a:1},
+{q:"Photosynthesis occurs in which organelle?",o:["Mitochondria","Chloroplast","Nucleus","Ribosome","Not Attempted"],a:1},
+{q:"BPSC TRE 4.0 exam is conducted by?",o:["UPSC","BPSC","BSSC","CBSE","Not Attempted"],a:1},
+{q:"Human blood is red due to?",o:["Hemoglobin","Plasma","WBC","Platelets","Not Attempted"],a:0},
+{q:"National Education Policy 2020 replaces?",o:["NPE 1986","NPE 1968","RTE 2009","All","Not Attempted"],a:0},
+{q:"Newton's First Law is also called?",o:["Law of Inertia","Law of Momentum","Law of Energy","Law of Force","Not Attempted"],a:0},
+{q:"Largest planet in solar system?",o:["Earth","Jupiter","Saturn","Mars","Not Attempted"],a:1},
+{q:"Article 21A is related to?",o:["Right to Education","Right to Life","Right to Equality","Right to Freedom","Not Attempted"],a:0},
+{q:"LCM of 4 and 6 is?",o:["6","12","24","2","Not Attempted"],a:1},
+{q:"Pataliputra was the capital of?",o:["Maurya","Gupta","Mughal","British","Not Attempted"],a:0}
+];
+let cur=0,ans=new Array(10).fill(undefined),show=false;
+
+function renderSlider(){
+ document.getElementById('slider').innerHTML=Qs.map((q,i)=>`
+  <div class="slide"><div class="qCard">
+   <div class="qNum">Q${i+1} of 10</div>
+   <div class="qText">Q${i+1}. ${q.q}</div>
+   ${q.o.map((op,j)=>{
+     let cls="opt"; if(j==4)cls+="";
+     let state="";
+     if(ans[i]!==undefined){
+       if(j==ans[i] && j!=q.a && show) cls+=" wrong";
+       if(j==ans[i] && j==q.a && show) cls+=" correct";
+       if(j==ans[i] &&!show) cls+=" sel";
+       if(show && j==q.a) cls+=" correct";
+     }
+     let icon=""; let sub="";
+     if(ans[i]!==undefined && show){
+       if(j==ans[i] && j!=q.a){ icon=`<div class="icon">✕</div>`; sub=`<div class="sub wrong">Incorrect — Wrong answer</div>`; }
+       if(j==q.a){ icon=`<div class="icon">✓</div>`; sub=`<div class="sub correct">Correct — This is the right answer</div>`; }
+     }
+     return `<div class="${cls}" onclick="sel(${i},${j})"><div><div class="opTitle">${String.fromCharCode(65+j)}. ${op}</div>${sub}</div><div>${icon}</div></div>`;
+   }).join('')}
+  </div></div>
+ `).join('');
+ document.getElementById('grid').innerHTML=Qs.map((_,i)=>`<div id="g${i}" onclick="jump(${i})">${i+1}</div>`).join('');
+ update();
+}
+function update(){
+ document.getElementById('slider').style.transform=`translateX(-${cur*100}%)`;
+ document.getElementById('ansCount').innerText=`${ans.filter(x=>x!==undefined).length} / 10 Answered`;
+ Qs.forEach((_,i)=>{let g=document.getElementById(`g${i}`);if(g){g.className=ans[i]!==undefined?'done':''; if(i==cur) g.classList.add('active')}});
+}
+function openD(){drawer.classList.add('open');overlay.classList.add('show')}
+function closeD(){drawer.classList.remove('open');overlay.classList.remove('show')}
+function jump(i){cur=i; show=false; renderSlider(); closeD();}
+function sel(qi,oi){
+ ans[qi]=oi; show=true; renderSlider();
+ setTimeout(()=>{ show=false; if(cur<9){cur++;} renderSlider(); closeD(); },900);
+}
+function go(d){ closeD(); show=false; cur=Math.max(0,Math.min(9,cur+d)); renderSlider(); }
+let sx=0;wrap.addEventListener('touchstart',e=>{sx=e.touches[0].clientX; closeD()});
+wrap.addEventListener('touchend',e=>{let dx=sx-e.changedTouches[0].clientX; if(Math.abs(dx)>50) go(dx>0?1:-1)});
+renderSlider();
+</script>
+</body>
+</html>
